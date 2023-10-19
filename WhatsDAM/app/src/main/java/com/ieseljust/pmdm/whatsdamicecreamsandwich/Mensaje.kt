@@ -1,4 +1,3 @@
 package com.ieseljust.pmdm.whatsdamicecreamsandwich
 
-class Mensaje {
-}
+data class Mensaje(val nombreUsuario: String, val textoMensaje: String)

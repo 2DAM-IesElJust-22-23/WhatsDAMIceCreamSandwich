@@ -1,4 +1,6 @@
 package com.ieseljust.pmdm.whatsdamicecreamsandwich
 
-class Mensajes {
+object Mensajes {
+    var listaMensajes: MutableList<Mensaje> = mutableListOf()
+    private lateinit var fontMissatges: ArrayList<Mensaje>
 }

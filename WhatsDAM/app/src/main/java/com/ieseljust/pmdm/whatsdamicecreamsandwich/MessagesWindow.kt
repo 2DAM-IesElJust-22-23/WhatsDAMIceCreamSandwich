@@ -1,40 +1,87 @@
 package com.ieseljust.pmdm.whatsdamicecreamsandwich
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import com.ieseljust.pmdm.whatsdamicecreamsandwich.databinding.ActivityMessagesWindow2Binding
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.ieseljust.pmdm.whatsdamicecreamsandwich.databinding.ActivityMessagesWindowBinding
 
 class MessagesWindow : AppCompatActivity() {
-
-    private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: ActivityMessagesWindow2Binding
+    private lateinit var binding: ActivityMessagesWindowBinding
+    private lateinit var adapter: MensajeAdapter
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivityMessagesWindow2Binding.inflate(layoutInflater)
+        binding = ActivityMessagesWindowBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)
+        recyclerView = binding.recyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        adapter = MensajeAdapter(Mensajes.listaMensajes)
+        recyclerView.adapter = adapter
 
-        val navController = findNavController(R.id.nav_host_fragment_content_messages_window)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        val messageEditText = findViewById<EditText>(R.id.MessageText)
+        val sendButton = findViewById<ImageButton>(R.id.sendMessage)
 
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        sendButton.setOnClickListener {
+            val messageText = messageEditText.text.toString().trim()
+            if (messageText.isNotEmpty()) {
+                // Agregar el mensaje a la lista de mensajes
+                Mensajes.listaMensajes.add(Mensaje("Usuario", messageText))
+                val position = Mensajes.listaMensajes.size - 1
+                adapter.notifyItemInserted(position)
+                // Hacer scroll hasta el último mensaje
+                recyclerView.smoothScrollToPosition(position)
+                // Limpiar el campo de texto
+                messageEditText.text.clear()
+            }
         }
     }
+}
 
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_messages_window)
-        return navController.navigateUp(appBarConfiguration)
-                || super.onSupportNavigateUp()
+class MensajeAdapter(private val mensajes: List<Mensaje>) : RecyclerView.Adapter<MyViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val vista = inflater.inflate(R.layout.my_msg_viewholder, parent, false)
+        return MyViewHolder(vista)
+    }
+
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        holder.bind(mensajes[position])
+    }
+
+    override fun getItemCount(): Int {
+        return mensajes.size
     }
 }
+
+class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    val mensaje = itemView.findViewById(R.id.msg_text) as TextView
+
+    fun bind(msg: Mensaje) {
+        mensaje.text = msg.textoMensaje
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

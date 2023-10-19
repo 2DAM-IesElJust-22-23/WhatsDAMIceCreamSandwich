@@ -1,40 +1,39 @@
-package com.example.whatsdamicecreamsandwich
+package com.ieseljust.pmdm.whatsdamicecreamsandwich
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-//import  com.example.whatsdamicecreamsandwich.activity_messages_window
+import com.ieseljust.pmdm.whatsdamicecreamsandwich.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        val editTextNickname = findViewById<EditText>(R.id.nickNameText)
-        val editTextIPAddress = findViewById<EditText>(R.id.serverAddressText)
-        val buttonConnect = findViewById<Button>(R.id.buttonConnect)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        val editTextNickname = binding.nickNameText
+        val editTextIPAddress = binding.serverAddressText
+        val buttonConnect = binding.buttonConnect
 
         buttonConnect.setOnClickListener {
             val nickname = editTextNickname.text.toString()
             val ipAddress = editTextIPAddress.text.toString()
 
             if (nickname.isNotBlank() && isValidIPAddress(ipAddress)) {
-                // Simula la connexió mitjançant un AlertDialog
                 val alertDialog = AlertDialog.Builder(this)
-                alertDialog.setTitle("Connexió establerta")
-                alertDialog.setMessage("NickName: $nickname\nAdreça IP: $ipAddress")
+                alertDialog.setTitle("Conexión establecida")
+                alertDialog.setMessage("Nickname: $nickname\nDirección IP: $ipAddress")
                 alertDialog.setPositiveButton("OK") { dialog, _ ->
-                    // Iniciar la segunda actividad
-                    val intent = Intent(this, activity_messages_window::class.java)
+                    val intent = Intent(this, MessagesWindow::class.java)
                     startActivity(intent)
                     dialog.dismiss()
                 }
                 alertDialog.show()
             } else {
-                Toast.makeText(this, "Nickname no pot estar buit i l'adreça IP ha de ser vàlida.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "El nickname no puede estar vacío y la dirección IP debe ser válida.", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -44,3 +43,8 @@ class MainActivity : AppCompatActivity() {
         return ipAddressPattern.matches(ipAddress)
     }
 }
+
+
+
+
+
