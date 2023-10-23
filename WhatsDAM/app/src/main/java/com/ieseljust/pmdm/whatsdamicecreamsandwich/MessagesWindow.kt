@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,20 +13,19 @@ import com.ieseljust.pmdm.whatsdamicecreamsandwich.databinding.ActivityMessagesW
 class MessagesWindow : AppCompatActivity() {
     private lateinit var binding: ActivityMessagesWindowBinding
     private lateinit var adapter: MensajeAdapter
-    private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMessagesWindowBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        recyclerView = binding.recyclerView
+        val recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = MensajeAdapter(Mensajes.listaMensajes)
         recyclerView.adapter = adapter
 
-        val messageEditText = findViewById<EditText>(R.id.MessageText)
-        val sendButton = findViewById<ImageButton>(R.id.sendMessage)
+        val messageEditText = binding.MessageText
+        val sendButton = binding.sendMessage
 
         sendButton.setOnClickListener {
             val messageText = messageEditText.text.toString().trim()
@@ -69,6 +66,9 @@ class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         mensaje.text = msg.textoMensaje
     }
 }
+
+
+
 
 
 
